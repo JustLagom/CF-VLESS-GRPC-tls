@@ -1,3 +1,5 @@
+// https://xtls.github.io/development/protocols/vless.html
+// https://github.com/zizifn/excalidraw-backup/blob/main/v2ray-protocol.excalidraw
 // <!--GAMFC-->version base on commit 841ed4e9ff121dde0ed6a56ae800c2e6c4f66056, time is 2024-04-16 18:02:37 UTC<!--GAMFC-END-->.
 // @ts-ignore
 import { connect } from 'cloudflare:sockets';
@@ -13,7 +15,6 @@ let sub = 'vless-4ca.pages.dev';
 let RproxyIP = 'true';//设置为true则不需填写proxyIP
 let proxyIP = '';//设置为false时则需自定义proxyIP
 
-
 if (!isValidUUID(userID)) {
 	throw new Error('uuid is not valid');
 }
@@ -21,7 +22,7 @@ if (!isValidUUID(userID)) {
 export default {
 	/**
 	 * @param {import("@cloudflare/workers-types").Request} request
-	 * @param {{UUID: string, PROXYIP: string}} env
+	 * @param {{UUID, TOKEN, PDOMAIN, PROXYIP: string}} env
 	 * @param {import("@cloudflare/workers-types").ExecutionContext} ctx
 	 * @returns {Promise<Response>}
 	 */
@@ -59,9 +60,6 @@ export default {
 		}
 	},
 };
-
-
-
 
 /**
  * @param {import("@cloudflare/workers-types").Request} request
@@ -274,9 +272,6 @@ function makeReadableWebSocketStream(webSocketServer, earlyDataHeader, log) {
 
 }
 
-// https://xtls.github.io/development/protocols/vless.html
-// https://github.com/zizifn/excalidraw-backup/blob/main/v2ray-protocol.excalidraw
-
 /**
  * 
  * @param {ArrayBuffer} vlessBuffer 
@@ -394,7 +389,6 @@ function processVlessHeader(
 		isUDP,
 	};
 }
-
 
 /**
  * 
@@ -527,7 +521,6 @@ function stringify(arr, offset = 0) {
 	return uuid;
 }
 
-
 /**
  * 
  * @param {import("@cloudflare/workers-types").WebSocket} webSocket 
@@ -612,8 +605,8 @@ async function getVLESSConfig(userID, hostName, sub, RproxyIP, _url) {
     --------------------------------------------------------------------------------------------------------------------
       订阅地址：https://${sub}/sub?host=${hostName}&uuid=${userID}&proxyip=${RproxyIP}
     <p>=================================================================================================================</p>
-      github 项目地址 Star!Star!Star!!!
-      telegram 交流群 技术大佬~在线发牌!
+      github 项目地址 Star!Star!!Star!!!
+      telegram 交流群 技术大佬~在线发牌!!!
       https://t.me/CMLiussss
     <p>=================================================================================================================</p>
     `
