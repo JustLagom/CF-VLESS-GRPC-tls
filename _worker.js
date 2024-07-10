@@ -11,6 +11,7 @@ let userID = 'd342d11e-d424-4583-b36e-524ab1f0afa4';
 let pdomain = 'www.bing.com';
 //订阅器设置
 let sub = 'vless-4ca.pages.dev';
+let subconfig = 'https://raw.githubusercontent.com/JustLagom/WorkerSub/main/urltestconfig.ini';
 //CF网络设置
 let RproxyIP = 'true';//设置为true则不需填写proxyIP
 let proxyIP = '';//设置为false时则需自定义proxyIP
