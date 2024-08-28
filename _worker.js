@@ -30,57 +30,57 @@ export default {
    * @returns {Promise<Response>}
    */
 async fetch(request, env, ctx) {
-	try {
-		token = env.TOKEN || token
-		pdomain = env.PDOMAIN || pdomain
-		userID = env.UUID || userID
-		RproxyIP = env.RPROXYIP || RproxyIP
-		sub = env.SUB || sub
-		subconverter = env.SUBAPI || subconverter
-		subconfig = env.SUBCONFIG || subconfig
-		proxyIP = env.PROXYIP || proxyIP
-		socks5Address = env.SOCKS5 || socks5Address
-		if (socks5Address) {
-			try {
-				parsedSocks5Address = socks5AddressParser(socks5Address)
-				enableSocks = true
-			} catch (err) {
-  		/** @type {Error} */ let e = err
-				console.log(e.toString())
-				enableSocks = false
-			}
-		}
-		const upgradeHeader = request.headers.get('Upgrade')
-		const url = new URL(request.url)
-		if (!upgradeHeader || upgradeHeader !== 'websocket') {
-			switch (url.pathname) {					
-				case `/${token}`: {
-					const vlessConfig = await getVLESSConfig(userID, request.headers.get('Host'), sub, RproxyIP, url)
-					return new Response(`${vlessConfig}`, {
-						status: 200,
-						headers: {
-							"Content-Type": "text/plain;charset=utf-8",
-						}
-					})
-				}
-				default:
-					url.hostname = pdomain
-					url.protocol = 'https:'
-					request = new Request(url, request)
-					return await fetch(request)
-			}
-		} else {
-				proxyIP = url.searchParams.get('proxyIP') || proxyIP
-				if (new RegExp('/proxyIP=', 'i').test(url.pathname)) proxyIP = url.pathname.toLowerCase().split('/proxyIP=')[1]
-				else if (new RegExp('/proxyIP.', 'i').test(url.pathname)) proxyIP = `proxyIP.${url.pathname.toLowerCase().split("/proxyIP.")[1]}`
-				 else if (!proxyIP || proxyIP == '') proxyIP = 'proxyip.fxxk.dedyn.io'
-				 return await vlessOverWSHandler(request)
-		}
-	} catch (err) {
-		/** @type {Error} */ let e = err
-		return new Response(e.toString())
+  try {
+	token = env.TOKEN || token
+	pdomain = env.PDOMAIN || pdomain
+	userID = env.UUID || userID
+	RproxyIP = env.RPROXYIP || RproxyIP
+	sub = env.SUB || sub
+	subconverter = env.SUBAPI || subconverter
+	subconfig = env.SUBCONFIG || subconfig
+	proxyIP = env.PROXYIP || proxyIP
+	socks5Address = env.SOCKS5 || socks5Address
+	if (socks5Address) {
+	   try {
+		parsedSocks5Address = socks5AddressParser(socks5Address)
+		enableSocks = true
+	    } catch (err) {
+  	      /** @type {Error} */ let e = err
+	      console.log(e.toString())
+	      enableSocks = false
+	      }
 	}
-    },
+	const upgradeHeader = request.headers.get('Upgrade')
+	const url = new URL(request.url)
+	if (!upgradeHeader || upgradeHeader !== 'websocket') {
+	   switch (url.pathname) {					
+		case `/${token}`: {
+			const vlessConfig = await getVLESSConfig(userID, request.headers.get('Host'), sub, RproxyIP, url)
+			return new Response(`${vlessConfig}`, {
+			status: 200,
+			headers: {
+			"Content-Type": "text/plain;charset=utf-8",
+			}
+		})
+	}
+	default:
+		url.hostname = pdomain
+		url.protocol = 'https:'
+		request = new Request(url, request)
+		return await fetch(request)
+		}
+	} else {
+		proxyIP = url.searchParams.get('proxyIP') || proxyIP
+		if (new RegExp('/proxyIP=', 'i').test(url.pathname)) proxyIP = url.pathname.toLowerCase().split('/proxyIP=')[1]
+		else if (new RegExp('/proxyIP.', 'i').test(url.pathname)) proxyIP = `proxyIP.${url.pathname.toLowerCase().split("/proxyIP.")[1]}`
+		else if (!proxyIP || proxyIP == '') proxyIP = 'proxyip.fxxk.dedyn.io'
+		return await vlessOverWSHandler(request)
+	        }
+        } catch (err) {
+	        /** @type {Error} */ let e = err
+	        return new Response(e.toString())
+                }
+        },
 }
 
 /**
